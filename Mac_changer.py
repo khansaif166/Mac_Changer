@@ -20,7 +20,7 @@ def MacChanger(interface,newMac):
     subprocess.call(['ifconfig', interface, 'down'])
     subprocess.call(['ifconfig', interface, 'hw', 'ether', newMac])
     subprocess.call(['ifconfig', interface, 'up'])
+    subprocess.call(['ifconfig', interface])
 
 MacChanger(getArgs().INTERFACE, getArgs().MAC_ADDRESS)
-print('Mac address changed to ' + getArgs().MAC_ADDRESS)
     
