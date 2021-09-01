@@ -2,7 +2,7 @@
 
 import subprocess
 import optparse
-
+import re
 
 def getArgs():
     parser = optparse.OptionParser()
@@ -20,7 +20,15 @@ def MacChanger(interface,newMac):
     subprocess.call(['ifconfig', interface, 'down'])
     subprocess.call(['ifconfig', interface, 'hw', 'ether', newMac])
     subprocess.call(['ifconfig', interface, 'up'])
-    subprocess.call(['ifconfig', interface])
+
+ifconfig_result = subprocess.check_output(['ifconfig', getArgs().INTERFACE])
+searchedMac = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
 
 MacChanger(getArgs().INTERFACE, getArgs().MAC_ADDRESS)
-    
+if searchedMac :
+    if searchedMac != getArgs().MAC_ADDRESS:
+        print('[+] MAC ADDRESS CHANGED FROM ' + searchedMac.group(0) + ' to ' + getArgs().MAC_ADDRESS)
+else :
+    print('[+] PLEASE TRY USING VALID INTERFACE ')
+
+
